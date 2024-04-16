@@ -60,6 +60,18 @@ class Board:
         self.busy = []
         self.ships = []
     
+    def add_ship(self, ship):
+        
+        for d in ship.dots():
+            if self.out(d) or d in self.busy:
+                raise BoardWrongShipException()
+        for d in ship.dots():
+            self.filed[d.x][d.y] = "■"
+            self.busy.append(d)
+            
+        self.ships.append(ship)
+        self.contour(ship)
+    
     def __str__(self):
         res = ""
         res += "  | 1 | 2 | 3 | 4 | 5 | 6 |"
@@ -85,24 +97,17 @@ class Board:
             for dx, dy in near:
               cur = Dot(d.x + dx, d.y + dy)
               cur = Dot(d.x + dx, d.y + dy)
-            if not(self.out(cur)) and cur not in self.busy:
-              if verb:
-                self.filed[cur.x][cur.y] = "."
+              if not(self.out(cur)) and cur not in self.busy:
+                if verb:
+                  self.filed[cur.x][cur.y] = "."
                 self.busy.append(cur)
-    def add_ship(self, ship):
-        
-        for d in ship.dots():
-            if self.out(d) or d in self.busy:
-                raise BoardWrongShipException()
-        for d in ship.dots():
-            self.filed[d.x][d.y] = "■"
-            self.busy.append(d)
+    
     def shot(self, d):
         if self.out(d):
-            raise BoardOutException()
+          raise BoardOutException()
         
         if d in self.busy:
-            raise BoardUsedException()
+          raise BoardUsedException()
         
         self.busy.append(d)
         
