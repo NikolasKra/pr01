@@ -201,7 +201,7 @@ class Game:
         self.n = n
         pl = self.random_board()
         co = self.random_board()
-        co.hid = False
+        co.hid = True
         
         self.ai = AI(co, pl)
         self.us = User(pl, co)
